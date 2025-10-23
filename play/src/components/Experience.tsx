@@ -35,6 +35,7 @@ export function Experience() {
     <KeyboardControls map={map}>
       <GameStateUpdater />
       <Canvas shadows camera={{ position: [0, 20, 6], fov: 60 }}>
+        <color attach="background" args={["white"]} />
         <ambientLight intensity={0.5} />
         <Grid infiniteGrid sectionSize={10} sectionColor={"#9c9c9c"} />
         <PlayerController />
