@@ -27,8 +27,6 @@ export function Experience() {
   useEffect(() => {
     if (isConnected) {
       console.log("Connected with ID:", socket.id);
-      socket.emit("join", { name: "Jogador" });
-      
       setPlayerId(socket.id);
     }
   }, [isConnected, setPlayerId, socket]);

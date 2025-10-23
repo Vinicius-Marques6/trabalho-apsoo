@@ -27,4 +27,10 @@ export class GameService {
       player.direction = direction;
     }
   }
+
+  getUsernameBySocketId(id: string): string | undefined {
+    const player = this.state.players.find((p) => p.id === id);
+    console.log(this.getState());
+    return player?.name;
+  }
 }

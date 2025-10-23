@@ -1,4 +1,4 @@
-import { useKeyboardControls } from "@react-three/drei";
+import { Billboard, useKeyboardControls, Text } from "@react-three/drei";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Controls } from "../types";
@@ -9,7 +9,11 @@ import { CharacterModel } from "./CharacterModel";
 
 function PlayerController() {
   const playerId = useGameStore((state) => state.playerId);
+  const player = useGameStore((state) =>
+    state.gameState?.players.find((p) => p.id === playerId)
+  );
   const playerRef = useRef<THREE.Group>(null);
+  const modelRef = useRef<THREE.Group>(null);
   const [, get] = useKeyboardControls<Controls>();
   const { camera } = useThree();
   const { socket } = useSocket();
@@ -21,7 +25,7 @@ function PlayerController() {
 
   // Main game loop
   useFrame(() => {
-    if (!playerRef.current) return;
+    if (!playerRef.current || !modelRef.current) return;
 
     const { forward, back, left, right } = get();
 
@@ -45,22 +49,23 @@ function PlayerController() {
       // To align the player's local negative Z-axis with the moveVector, we add Math.PI to the angle.
       const targetRotation = Math.atan2(moveVector.x, moveVector.z) + Math.PI;
 
-      const currentRotation = playerRef.current.rotation.y;
-      let angleDiff = targetRotation - currentRotation;
+      const currentRotation = modelRef.current.rotation.y;
+      const normalizedCurrentRotation = currentRotation % (2 * Math.PI);
+      let angleDiff = targetRotation - normalizedCurrentRotation;
 
       // Normalize angleDiff to the range [-PI, PI]
       if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
       if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
 
       // Smoothly interpolate the current rotation towards the target rotation
-      playerRef.current.rotation.y += angleDiff * rotationSpeed;
+      modelRef.current.rotation.y += angleDiff * rotationSpeed;
     }
 
     if (playerId) {
-      socket.emit("move", {
+      socket.emit("game:move", {
         x: playerRef.current.position.x,
         y: playerRef.current.position.z,
-        direction: playerRef.current.rotation.y,
+        direction: modelRef.current.rotation.y,
       });
     }
 
@@ -75,7 +80,14 @@ function PlayerController() {
 
   return (
     <group ref={playerRef}>
-      <CharacterModel color="hotpink" />
+      <Billboard position={[0, 2.5, 0]}>
+        <Text fontSize={0.5} color="white" outlineWidth={0.05} outlineColor="black">
+          {player?.name || "Player"}
+        </Text>
+      </Billboard>
+      <group ref={modelRef}>
+        <CharacterModel color="hotpink" />
+      </group>
     </group>
   );
 }

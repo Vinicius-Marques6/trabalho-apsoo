@@ -30,13 +30,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.broadcastState();
   }
 
-  @SubscribeMessage('join')
+  @SubscribeMessage('game:join')
   handleJoin(client: Socket, payload: { name: string }) {
     this.gameService.addPlayer(client.id, payload.name);
     this.broadcastState();
   }
 
-  @SubscribeMessage('move')
+  @SubscribeMessage('game:move')
   handleMove(
     client: Socket,
     payload: { x: number; y: number; direction: number },
@@ -51,6 +51,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private broadcastState() {
-    this.server.emit('state', this.gameService.getState());
+    this.server.emit('game:state', this.gameService.getState());
   }
 }

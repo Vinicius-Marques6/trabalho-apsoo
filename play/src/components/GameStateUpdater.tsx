@@ -12,10 +12,10 @@ function GameStateUpdater() {
       setGameState(newState);
     }
 
-    socket.on("state", onGameStateUpdate);
+    socket.on("game:state", onGameStateUpdate);
 
     return () => {
-      socket.off("state", onGameStateUpdate);
+      socket.off("game:state", onGameStateUpdate);
     };
   }, [setGameState, socket]);
 
