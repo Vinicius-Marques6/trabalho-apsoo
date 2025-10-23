@@ -1,16 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
-interface Player {
-  id: string;
-  name: string;
-  x: number;
-  y: number;
-  direction?: number;
-}
-
-interface GameState {
-  players: Player[];
-}
+import { GameState } from '@trabalho-apsoo/shared';
 
 @Injectable()
 export class GameService {

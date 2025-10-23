@@ -12,14 +12,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useGameStore } from "../stores/useGameStore";
 import { useSocket } from "./SocketContext";
-
-enum Controls {
-  forward = "forward",
-  back = "back",
-  left = "left",
-  right = "right",
-  jump = "jump",
-}
+import { Controls } from "../types";
 
 function OtherPlayer({
   x,

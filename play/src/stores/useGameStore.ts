@@ -1,13 +1,10 @@
+import type { GameState } from "@trabalho-apsoo/shared";
 import { create } from "zustand";
-
-type GameState = {
-    players: Array<{ id: string; x: number; y: number; direction?: number }>;
-};
 
 type Store = {
     playerId?: string;
     gameState: GameState | null;
-    setPlayerId: (id: string) => void;
+    setPlayerId: (id: string | undefined) => void;
     setGameState: (state: GameState) => void;
 };
 

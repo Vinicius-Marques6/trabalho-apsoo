@@ -1,0 +1,26 @@
+{
+  "name": "trabalho-apsoo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vinicius-Marques6/trabalho-apsoo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Vinicius-Marques6/trabalho-apsoo/issues"
+  },
+  "homepage": "https://github.com/Vinicius-Marques6/trabalho-apsoo#readme",
+  "workspaces": [
+    "back",
+    "front",
+    "packages/*"
+  ]
+}
