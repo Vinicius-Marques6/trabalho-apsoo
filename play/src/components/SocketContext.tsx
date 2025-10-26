@@ -15,16 +15,26 @@ const SocketContext = createContext<SocketContextType>({
 function SocketProvider({ children }: { children: React.ReactNode }) {
   const [isConnected, setIsConnected] = useState(socket.connected);
 
+  const handleConnect = () => {
+    setIsConnected(true);
+    console.log("Socket connected:", socket.id);
+  };
+
+  const handleDisconnect = () => {
+    setIsConnected(false);
+    console.log("Socket disconnected");
+  }
+
   useEffect(() => {
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('disconnect', () => setIsConnected(false));
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
 
     socket.connect();
 
     return () => {
       socket.disconnect();
-      socket.off('connect');
-      socket.off('disconnect');
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
     };
   }, []);
 

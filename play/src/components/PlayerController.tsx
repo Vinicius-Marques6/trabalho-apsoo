@@ -24,7 +24,7 @@ function PlayerController() {
   const cameraOffsetZ = 10;
 
   // Main game loop
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!playerRef.current || !modelRef.current) return;
 
     const { forward, back, left, right } = get();
@@ -39,7 +39,7 @@ function PlayerController() {
 
     // Normalize and scale the movement vector
     if (moveVector.length() > 0) {
-      moveVector.normalize().multiplyScalar(speed);
+      moveVector.normalize().multiplyScalar(speed * delta * 60);
       playerRef.current.position.add(moveVector);
 
       // Calculate target rotation based on movement direction

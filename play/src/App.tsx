@@ -1,8 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import './App.css';
 import Experience from './components/Experience';
-import SocketProvider, { useSocket } from './components/SocketContext';
+import { useSocket } from './components/SocketContext';
 import ChatUI from './components/ChatUI';
+import { RoomAudioRenderer, RoomContext, TrackToggle } from '@livekit/components-react';
+import { Room, Track } from 'livekit-client';
+import api from './api';
 
 function JoinGameForm({ onJoin }: { onJoin: (name: string) => void }) {
   const [name, setName] = useState('');
@@ -34,13 +37,30 @@ function JoinGameForm({ onJoin }: { onJoin: (name: string) => void }) {
   );
 }
 
-function Game() {
+function App() {
   const { socket } = useSocket();
   const [hasJoined, setHasJoined] = useState(false);
+  const [room] = useState(() => new Room());
 
-  const handleJoin = (name: string) => {
+  const handleJoin = async (name: string) => {
+    await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+
+    const response = await api.get('/livekit/token', {
+      params: {
+        id: socket.id,
+        name: name,
+      }
+    });
+
     socket.emit('game:join', { name });
+
+    await room.connect(import.meta.env.VITE_LIVEKIT_URL || 'ws://localhost:7880', response.data.token);
+
     setHasJoined(true);
+
+    return () => {
+      room.disconnect();
+    };
   };
 
   if (!hasJoined) {
@@ -49,20 +69,23 @@ function Game() {
 
   return (
     <>
-      <ChatUI />
-      <Experience />
+      <RoomContext.Provider value={room}>
+        <ControlBar />
+        <RoomAudioRenderer />
+        <ChatUI />
+        <Experience />
+      </RoomContext.Provider>
     </>
   );
 }
 
-function App() {
+function ControlBar() {
   return (
-    <>
-      <SocketProvider>
-        <Game />
-      </SocketProvider>
-    </>
-  )
+    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex space-x-4 z-10 bg-gray-200 bg-opacity-50 p-4 rounded-lg">
+      <TrackToggle source={Track.Source.Microphone} />
+      <TrackToggle source={Track.Source.Camera} />
+    </div>
+  );
 }
 
 export default App;

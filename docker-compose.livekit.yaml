@@ -1,0 +1,32 @@
+services:
+  livekit:
+    image: livekit/livekit-server
+    command: --dev --bind 0.0.0.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.livekit.rule=Host(`localhost`) || Host(`26.188.110.111`)"
+      - "traefik.http.routers.livekit.entrypoints=websecure"
+      - "traefik.http.routers.livekit.tls=true"
+      - "traefik.http.services.livekit.loadbalancer.server.port=7880"
+    ports:
+      - "7880:7880"
+      - "7881:7881"
+      - "7882:7882"
+    volumes:
+      - ./livekit_data:/app/data
+
+  traefik:
+    image: traefik:v3.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.file.directory=/certs"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock
