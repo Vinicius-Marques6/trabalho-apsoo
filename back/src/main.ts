@@ -2,12 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { NestApplicationOptions } from '@nestjs/common';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 dotenv.config();
 
 async function bootstrap() {
-  let nestFactoryOptions = {};
+  let nestFactoryOptions: NestApplicationOptions = {
+    bodyParser: false,
+  };
 
   if (process.env.HTTPS_ENABLED == 'true') {
     if (!process.env.HTTPS_KEY_PATH || !process.env.HTTPS_CERT_PATH) {
@@ -17,6 +19,7 @@ async function bootstrap() {
     }
 
     nestFactoryOptions = {
+      ...nestFactoryOptions,
       httpsOptions: {
         key: fs.readFileSync(process.env.HTTPS_KEY_PATH),
         cert: fs.readFileSync(process.env.HTTPS_CERT_PATH),
