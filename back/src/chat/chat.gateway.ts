@@ -5,7 +5,7 @@ import {
 } from '@nestjs/websockets';
 import { ChatMessage } from '@trabalho-apsoo/shared';
 import { Server, Socket } from 'socket.io';
-import { GameService } from 'src/game/game.service';
+import { GameService } from '../game/game.service';
 
 @WebSocketGateway()
 export class ChatGateway {
