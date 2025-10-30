@@ -1,4 +1,6 @@
 import {
+  Environment,
+  Gltf,
   Grid,
   KeyboardControls,
   type KeyboardControlsEntry,
@@ -11,6 +13,7 @@ import { Controls } from "../types";
 import PlayerController from "./PlayerController";
 import GameStateUpdater from "./GameStateUpdater";
 import RemotePlayers from "./RemotePlayers";
+import { Physics, RigidBody } from "@react-three/rapier";
 
 export function Experience() {
   const map: KeyboardControlsEntry<Controls>[] = [
@@ -36,10 +39,15 @@ export function Experience() {
       <GameStateUpdater />
       <Canvas shadows camera={{ position: [0, 20, 6], fov: 60 }}>
         <color attach="background" args={["white"]} />
-        <ambientLight intensity={0.5} />
+        <Environment preset="apartment" />
         <Grid infiniteGrid sectionSize={10} sectionColor={"#9c9c9c"} />
-        <PlayerController />
-        <RemotePlayers />
+        <Physics debug>
+          <RigidBody type="fixed" colliders="trimesh">
+            <Gltf src="./Office.glb" position={[0, 0, 0]} scale={1.3} />
+          </RigidBody>
+          <PlayerController />
+          <RemotePlayers />
+        </Physics>
       </Canvas>
     </KeyboardControls>
   );

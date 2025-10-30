@@ -6,14 +6,16 @@ import { useGameStore } from "../stores/useGameStore";
 import { useSocket } from "./SocketContext";
 import * as THREE from "three";
 import { CharacterModel } from "./CharacterModel";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 
 function PlayerController() {
   const playerId = useGameStore((state) => state.playerId);
   const player = useGameStore((state) =>
     state.gameState?.players.find((p) => p.id === playerId)
   );
-  const playerRef = useRef<THREE.Group>(null);
+  // const playerRef = useRef<THREE.Group>(null);
   const modelRef = useRef<THREE.Group>(null);
+  const rigidBodyRef = useRef<any>(null);
   const [, get] = useKeyboardControls<Controls>();
   const { camera } = useThree();
   const { socket } = useSocket();
@@ -25,7 +27,7 @@ function PlayerController() {
 
   // Main game loop
   useFrame((_, delta) => {
-    if (!playerRef.current || !modelRef.current) return;
+    if (!rigidBodyRef.current || !modelRef.current) return;
 
     const { forward, back, left, right } = get();
 
@@ -40,7 +42,15 @@ function PlayerController() {
     // Normalize and scale the movement vector
     if (moveVector.length() > 0) {
       moveVector.normalize().multiplyScalar(speed * delta * 60);
-      playerRef.current.position.add(moveVector);
+      //playerRef.current.position.add(moveVector);
+
+      const curentPost = rigidBodyRef.current.translation();
+      const newPos = {
+        x: curentPost.x + moveVector.x,
+        y: curentPost.y,
+        z: curentPost.z + moveVector.z,
+      };
+      rigidBodyRef.current.setTranslation(newPos, true);  
 
       // Calculate target rotation based on movement direction
       // Math.atan2(y, x) calculates the angle from the positive X-axis to the point (x, y).
@@ -61,34 +71,46 @@ function PlayerController() {
       modelRef.current.rotation.y += angleDiff * rotationSpeed;
     }
 
-    if (playerId) {
+    if (playerId && rigidBodyRef.current) {
+      const pos = rigidBodyRef.current.translation();
       socket.emit("game:move", {
-        x: playerRef.current.position.x,
-        y: playerRef.current.position.z,
+        x: pos.x,
+        y: pos.z,
         direction: modelRef.current.rotation.y,
       });
     }
 
     // Update camera position to follow the player
-    const playerPosition = playerRef.current.position;
+    const playerPosition = rigidBodyRef.current.translation();
     const cameraOffset = new THREE.Vector3(0, cameraOffsetY, cameraOffsetZ);
-    const newCameraPosition = playerPosition.clone().add(cameraOffset);
+    const newCameraPosition = new THREE.Vector3(
+      playerPosition.x,
+      playerPosition.y,
+      playerPosition.z
+    ).add(cameraOffset);
 
     camera.position.copy(newCameraPosition);
-    camera.lookAt(playerPosition);
+    camera.lookAt(
+      new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
+    );
   });
 
   return (
-    <group ref={playerRef}>
+    <RigidBody
+    ref={rigidBodyRef}
+    colliders={false}
+    lockRotations
+  >
+    <group ref={modelRef}>
+      <CharacterModel color="hotpink" />
       <Billboard position={[0, 2.5, 0]}>
         <Text fontSize={0.5} color="white" outlineWidth={0.05} outlineColor="black">
           {player?.name || "Player"}
         </Text>
       </Billboard>
-      <group ref={modelRef}>
-        <CharacterModel color="hotpink" />
-      </group>
     </group>
+    <CapsuleCollider args={[0.5, 0.5]} position={[0, 1, 0]} />
+  </RigidBody>
   );
 }
 

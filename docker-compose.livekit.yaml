@@ -12,8 +12,6 @@ services:
       - "7880:7880"
       - "7881:7881"
       - "7882:7882"
-    volumes:
-      - ./livekit_data:/app/data
 
   traefik:
     image: traefik:v3.5

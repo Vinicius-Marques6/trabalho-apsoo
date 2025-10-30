@@ -20,7 +20,7 @@
   "homepage": "https://github.com/Vinicius-Marques6/trabalho-apsoo#readme",
   "workspaces": [
     "back",
-    "front",
+    "play",
     "packages/*"
   ]
 }
