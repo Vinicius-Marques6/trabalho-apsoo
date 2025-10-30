@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -8,12 +8,17 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    title: "Trabalho APSOO",
+    frame: false,
     webPreferences: {
       contextIsolation: true,
-      sandbox: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  win.on('resize', () => {
+    win.webContents.invalidate();
+  });
+    
 
   Menu.setApplicationMenu(null);
 
@@ -57,4 +62,22 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+ipcMain.handle('minimize-window', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.minimize();
+});
+
+ipcMain.handle('maximize-window', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) {
+    if (win.isMaximized()) win.unmaximize();
+    else win.maximize();
+  }
+});
+
+ipcMain.handle('close-window', () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.close();
 });
