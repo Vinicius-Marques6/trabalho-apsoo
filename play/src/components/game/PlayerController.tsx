@@ -1,11 +1,11 @@
 import { Billboard, useKeyboardControls, Text } from "@react-three/drei";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import { Controls } from "../types";
-import { useGameStore } from "../stores/useGameStore";
-import { useSocket } from "./SocketContext";
+import { Controls } from "@/types";
+import { useGameStore } from "@/stores/useGameStore";
+import { useSocket } from "@/components/SocketContext";
 import * as THREE from "three";
-import { CharacterModel } from "./CharacterModel";
+import { CharacterModel } from "@/components/game/CharacterModel";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 
 function PlayerController() {

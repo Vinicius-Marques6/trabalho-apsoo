@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useSocket } from './SocketContext';
+import { useSocket } from '@/components/SocketContext';
 import type { ChatMessage } from '@trabalho-apsoo/shared';
 import { getRandomColor } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';

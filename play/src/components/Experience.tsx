@@ -7,12 +7,12 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
-import { useGameStore } from "../stores/useGameStore";
-import { useSocket } from "./SocketContext";
-import { Controls } from "../types";
-import PlayerController from "./PlayerController";
-import GameStateUpdater from "./GameStateUpdater";
-import RemotePlayers from "./RemotePlayers";
+import { useGameStore } from "@/stores/useGameStore";
+import { useSocket } from "@/components/SocketContext";
+import { Controls } from "@/types";
+import PlayerController from "@/components/game/PlayerController";
+import GameStateUpdater from "@/components/game/GameStateUpdater";
+import RemotePlayers from "@/components/game/RemotePlayers";
 import { Physics, RigidBody } from "@react-three/rapier";
 
 export function Experience() {

@@ -1,5 +1,5 @@
-import { useGameStore } from "../stores/useGameStore";
-import { CharacterModel } from "./CharacterModel";
+import { useGameStore } from "@/stores/useGameStore";
+import { CharacterModel } from "@/components/game/CharacterModel";
 import { Billboard, Text } from "@react-three/drei";
 
 function RemotePlayer({

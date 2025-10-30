@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useGameStore } from "../stores/useGameStore";
-import { useSocket } from "./SocketContext";
+import { useGameStore } from "@/stores/useGameStore";
+import { useSocket } from "@/components/SocketContext";
 import type { GameState } from "@trabalho-apsoo/shared";
 
 function GameStateUpdater() {

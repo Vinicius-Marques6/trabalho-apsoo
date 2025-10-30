@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
-import { Button } from './ui/button';
-import ChatPanel from './ChatPanel';
+import { Button } from '@/components/ui/button';
+import ChatPanel from '@/components/overlay/ChatPanel';
 
 export default function Overlay() {
   const [isChatOpen, setIsChatOpen] = useState(false);
