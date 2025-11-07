@@ -22,7 +22,8 @@ function PlayerController() {
 
   const speed = 0.1;
   const rotationSpeed = 0.2;
-  const cameraOffsetY = 5;
+  const cameraOffsetX = 0;
+  const cameraOffsetY = 15;
   const cameraOffsetZ = 10;
 
   // Main game loop
@@ -82,7 +83,7 @@ function PlayerController() {
 
     // Update camera position to follow the player
     const playerPosition = rigidBodyRef.current.translation();
-    const cameraOffset = new THREE.Vector3(0, cameraOffsetY, cameraOffsetZ);
+    const cameraOffset = new THREE.Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
     const newCameraPosition = new THREE.Vector3(
       playerPosition.x,
       playerPosition.y,

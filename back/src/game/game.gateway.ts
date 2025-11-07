@@ -50,6 +50,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.broadcastState();
   }
 
+  @SubscribeMessage('player-zone-change')
+  handlePlayerZoneChange(client: Socket, payload: { zoneId: string }) {
+    this.server.emit('player-zone-updated', payload);
+  }
+
   private broadcastState() {
     this.server.emit('game:state', this.gameService.getState());
   }
