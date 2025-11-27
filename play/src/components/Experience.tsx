@@ -43,27 +43,27 @@ export function Experience() {
       <Canvas shadows camera={{ position: [0, 20, 6], fov: 60 }}>
         <color attach="background" args={["white"]} />
         <Environment preset="apartment" />
-        <Grid infiniteGrid sectionSize={10} sectionColor={"#9c9c9c"} />
+        {/* <Grid infiniteGrid sectionSize={10} sectionColor={"#9c9c9c"} /> */}
         <Suspense>
-          <Physics debug timeStep="vary">
+          <Physics timeStep="vary">
             <RigidBody type="fixed" colliders="trimesh">
-              <Gltf src="./Office.glb" position={[0, 0, 0]} scale={1.3} rotation={[0, -Math.PI / 4, 0]} />
+              <Gltf src="./Office.glb" position={[0, 0, 0]} scale={1.3} />
             </RigidBody>
 
             {/* Voice Zones */}
             <VoiceZone 
-              position={[5, 1, 5]} 
-              size={[2, 2, 2]} 
+              position={[2, 1, 10]} 
+              size={[4, 2, 3]} 
               zoneId="meeting-room-1" 
             />
             <VoiceZone 
-              position={[-5, 1, -5]} 
-              size={[2, 2, 2]} 
+              position={[0, 1, -10]} 
+              size={[6, 2, 5]} 
               zoneId="meeting-room-2" 
             />
             <VoiceZone 
-              position={[0, 1, 0]} 
-              size={[3, 2, 3]} 
+              position={[-11, 1, -10]} 
+              size={[5, 2, 5]} 
               zoneId="main-hall" 
             />
 

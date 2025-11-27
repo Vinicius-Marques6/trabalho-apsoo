@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"pnpm --filter back... start:dev\" \"pnpm --filter play... dev\""
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
     "back",
     "play",
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

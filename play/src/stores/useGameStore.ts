@@ -15,7 +15,7 @@ type Store = {
 export const useGameStore = create<Store>((set) => ({
   playerId: undefined,
   gameState: null,
-  currentVoiceZone: null,
+  currentVoiceZone: 'default',
   playersInZones: {},
 
   setCurrentVoiceZone: (zoneId) => set({ currentVoiceZone: zoneId }),

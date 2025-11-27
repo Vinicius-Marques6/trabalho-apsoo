@@ -3,6 +3,12 @@ const path = require('path');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+if (isDev) {
+  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+  // Esta linha deve vir antes de qualquer require('electron')
+  require('electron').app.commandLine.appendSwitch('ignore-certificate-errors');
+}
+
 function createWindow() {
   // Cria a janela do navegador.
   const win = new BrowserWindow({
@@ -27,7 +33,9 @@ function createWindow() {
     // Carrega a URL do servidor Vite (da pasta 'play')
     // Certifique-se de que esta é a porta correta que o Vite usa.
     console.log('Running in development, loading Vite server...');
-    win.loadURL('http://localhost:5173'); // Porta padrão do Vite/React
+    win.loadURL('https://26.188.110.111:5173/'); // Porta padrão do Vite/React
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+    app.commandLine.appendSwitch('ignore-certificate-errors');
 
     // Abre o DevTools (opcional).
     win.webContents.openDevTools();

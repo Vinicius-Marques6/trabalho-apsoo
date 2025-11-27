@@ -19,7 +19,7 @@ export function VoiceZone({ position, size, zoneId, children }: VoiceZoneProps) 
 
   const handleExit = () => {
     console.log(`Player ${playerId} left voice zone: ${zoneId}`);
-    setCurrentVoiceZone(null);
+    setCurrentVoiceZone('default');
   };
 
   return (

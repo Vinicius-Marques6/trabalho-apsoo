@@ -101,6 +101,7 @@ function PlayerController() {
     ref={rigidBodyRef}
     colliders={false}
     lockRotations
+    position={[0, 10, 0]}
   >
     <group ref={modelRef}>
       <CharacterModel color="hotpink" />
